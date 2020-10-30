@@ -37,6 +37,8 @@ import org.talend.core.runtime.dynamic.DynamicServiceUtil;
 import org.talend.core.runtime.dynamic.IDynamicPlugin;
 import org.talend.core.runtime.dynamic.IDynamicPluginConfiguration;
 import org.talend.core.runtime.hd.IDynamicDistributionManager;
+import org.talend.core.runtime.maven.MavenArtifact;
+import org.talend.core.runtime.maven.MavenUrlHelper;
 import org.talend.designer.maven.aether.AbsDynamicProgressMonitor;
 import org.talend.designer.maven.aether.DummyDynamicMonitor;
 import org.talend.designer.maven.aether.IDynamicMonitor;
@@ -546,7 +548,7 @@ public class DynamicDistributionManager implements IDynamicDistributionManager {
     }
 
     private static ILibrariesService getLibrariesService() {
-        return (ILibrariesService) GlobalServiceRegister.getDefault().getService(ILibrariesService.class);
+        return GlobalServiceRegister.getDefault().getService(ILibrariesService.class);
     }
 
     @Override
@@ -624,5 +626,35 @@ public class DynamicDistributionManager implements IDynamicDistributionManager {
     @Override
     public String getDynamicDistributionCacheVersion() {
         return HadoopDistributionsHelper.getCacheVersion();
+    }
+
+    public boolean isDynamicDistributionMavenUrl(String mvnUri) {
+        if (StringUtils.isNotEmpty(mvnUri)) {
+            MavenArtifact parseMvnUrl = MavenUrlHelper.parseMvnUrl(mvnUri);
+            if (parseMvnUrl != null) {
+                String repositoryUrl = parseMvnUrl.getRepositoryUrl();
+                return StringUtils.isNotEmpty(repositoryUrl)
+                        && repositoryUrl.equalsIgnoreCase(getDynamicDistributionRepositoryUrl());
+            }
+        }
+        return false;
+    }
+
+    private String getDynamicDistributionRepositoryUrl() {
+        try {
+            IDynamicMonitor monitor = new DummyDynamicMonitor();
+            List<IDynamicPlugin> allBuiltinDynamicPlugins = getAllUsersDynamicPlugins(monitor);
+            if (allBuiltinDynamicPlugins != null && !allBuiltinDynamicPlugins.isEmpty()) {
+                for (IDynamicPlugin dynamicPlugin : allBuiltinDynamicPlugins) {
+                    IDynamicPluginConfiguration pluginConfiguration = dynamicPlugin.getPluginConfiguration();
+                    if (pluginConfiguration != null) {
+                        return pluginConfiguration.getRepository();
+                    }
+                }
+            }
+        } catch (Exception e1) {
+            ExceptionHandler.process(e1);
+        }
+        return null;
     }
 }
