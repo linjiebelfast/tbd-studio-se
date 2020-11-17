@@ -15,11 +15,11 @@
 	"description": "",
     "modules": [
         {
-            "id": "commons-lang3-3.4",
+            "id": "commons-lang3-3.5",
             "type": "STANDARD",
             "context": "{properties.context}",
-            "jarName": "commons-lang3-3.4.jar",
-            "mvnUri": "mvn:org.talend.libraries/commons-lang3-3.4/6.2.0",
+            "jarName": "commons-lang3-3.5.jar",
+            "mvnUri": "mvn:org.talend.libraries/commons-lang3-3.5/6.2.0",
             "useStudioRepository": "true",
             "supportedSparkVersions": [
                 "SPARK_2_2",
@@ -28,7 +28,7 @@
             ],
             "description": ""
 		},
-        {
+        {kite
 			"id": "avro-mapred",
 			"type": "BASE",
 			"context": "{properties.context}",
@@ -1138,6 +1138,33 @@
 			"description": ""
 		},
 		{
+			"id": "kite-data-mapreduce",
+			"type": "BASE",
+			"context": "{properties.context}",
+			"groupId": "org.kitesdk",
+			"artifactId": "kite-data-mapreduce",
+			"classifier": "",
+			"description": ""
+		},
+		{
+			"id": "kite-hadoop-compatibility",
+			"type": "BASE",
+			"context": "{properties.context}",
+			"groupId": "org.kitesdk",
+			"artifactId": "kite-hadoop-compatibility",
+			"classifier": "",
+			"description": ""
+		},
+		{
+			"id": "kite-data-hive",
+			"type": "BASE",
+			"context": "{properties.context}",
+			"groupId": "org.kitesdk",
+			"artifactId": "kite-data-hive",
+			"classifier": "",
+			"description": ""
+		},
+		{
 			"id": "pig",
 			"type": "BASE",
 			"context": "{properties.context}",
@@ -1874,10 +1901,12 @@
 				"avro-mapred",
 				"sqoop_only",
 				"json-20080701",
-				"commons-lang3-3.4",
+				"commons-lang3-3.5",
 				"jackson-core",
 				"jackson-databind",
 				"kite-data-core",
+				"kite-data-mapreduce",
+				"kite-hadoop-compatibility",
 				"httpclient-4.5.3",
 				"httpcore-4.4.6"
 			]
@@ -1887,6 +1916,16 @@
 			"description": "",
 			"modules": [
 				"kite-data-core"
+			]
+		},
+		{
+			"id": "SQOOP-HIVE-LIB-DYNAMIC",
+			"description": "",
+			"modules": [
+				"kite-data-hive",
+				"hive-metastore",
+				"hive-exec"
+				 
 			]
 		},
 		{
