@@ -28,7 +28,7 @@
             ],
             "description": ""
 		},
-        {kite
+        {
 			"id": "avro-mapred",
 			"type": "BASE",
 			"context": "{properties.context}",
